@@ -9,14 +9,12 @@ import openai.error
 
 # Api ChatGPT
 chatgpt_keys = [
-    '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',
-    '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',
-    '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'
+    None  # Keys
 ]
 key = key_generator(chatgpt_keys)
 openai.api_key = next(key)
 # Api Telegram
-fix_api_key = '6021287378:AAGfgKrSUARHuc-MlCdd2ZJqy6Ug8IZiQq8'
+fix_api_key = None  # Keys
 
 
 async def get_answer(history: list):
