@@ -1,0 +1,5 @@
+__pycache__/
+fix_env_ubu/
+fix_env_win/
+.pytest_cache/
+just_for_coding.py
