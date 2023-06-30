@@ -1,0 +1,4 @@
+[MASTER]
+max-line-length=120
+disable=E1120, C0103
+; init-hook='import sys; import os; sys.path.append(os.path.join(os.path.dirname(__file__), "fix"))'
