@@ -23,7 +23,7 @@ class FixClient(aiomcache.Client):
         This method to get or create cache with pickle & deque.
         """
         block_id = str(block_id).encode('utf-8')
-        history = await self.get(block_id)
+        history = await self.get(key=block_id)
         if history is not None:
             history = pickle.loads(history)
             return history

@@ -4,9 +4,9 @@ import openai.error
 from telegram import Update  # ForceReply
 from telegram.ext import Application, ContextTypes, MessageHandler, filters  # CommandHandler
 
-from . import utils
-from .keys import openai_api_keys, telegram_api_key
-from .cache import FixClient
+import utils
+from keys import openai_api_keys, telegram_api_key
+from cache import FixClient
 # import asyncio
 
 
