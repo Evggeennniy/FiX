@@ -2,5 +2,6 @@ __pycache__/
 fix_env_ubu/
 fix_env_win/
 .pytest_cache/
+.vscode/
 just_for_coding.py
 keys.py

@@ -7,7 +7,7 @@ import sys
 
 def monitor_resources():
     while True:
-        cpu_percent = psutil.cpu_percent(interval=1)
+        cpu_percent = psutil.cpu_percent(interval=5)
         ram_percent = psutil.virtual_memory().percent
         disk_percent = psutil.disk_usage('C:\PYTHON3\PracticeCODE\FiX').percent
 
