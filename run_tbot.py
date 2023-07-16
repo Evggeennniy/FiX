@@ -1,24 +1,11 @@
 """Fix's imports"""
-import openai.error
 from telegram import Update  # ForceReply
 from telegram.ext import Application, ContextTypes, MessageHandler, filters, CommandHandler
 
 import utils
 import chatgpt
-from keys import openai_api_keys, telegram_api_key
-from cache import FixClient
-# import asyncio
-
-
-# Api ChatGPT
-chatgpt_keys = openai_api_keys
-key = utils.key_generator(chatgpt_keys)
-openai.api_key = next(key)
-# Api Telegram
-FIX_API_KEY = telegram_api_key
-# Cache settings
-LENGHT_OF_DATA = 15  # max length of data
-TIME_OF_EXP = 60 * 30  # seconds * minutes
+from keys import telegram_api_key
+from cache import BotCacheClient
 
 
 async def hi(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -70,40 +57,30 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """
     The main function of processing clients messages
     """
-    try:
-        acache = FixClient("127.0.0.1", 11211)
-        user_id = update.effective_user.id
-        user_name = update.effective_user.username
-        user_message = update.effective_message.text
-        history = await acache.get_or_create_history(user_id, LENGHT_OF_DATA, TIME_OF_EXP)
-        history.append({'role': 'user', 'content': user_message})
-        system_answer = await chatgpt.get_answer(list(history))
-        history.append({'role': 'system', 'content': system_answer})
-        await acache.update_history(user_id, history, TIME_OF_EXP)
+    acache = BotCacheClient("127.0.0.1", 11211)
 
-        await update.message.reply_text(system_answer)
-        utils.logging(f'FiX ответил пользователю - @{user_name} id:{user_id} на сообщение, - \"{user_message}\".')
+    user_id = update.effective_user.id
+    user_name = update.effective_user.username
+    user_message = update.effective_message.text
 
-    except openai.error.RateLimitError:
-        openai.api_key = next(key)
-        utils.logging('Fix сменил Api-ключ и идет на повторный ответ.')
-        await update.message.reply_text('Секунду.')
-        await handler(update, context)
+    history = await acache.get_or_create_history(user_id)
+    history.append({'role': 'user', 'content': user_message})
+    system_answer = await chatgpt.get_answer(list(history))
+    history.append({'role': 'system', 'content': system_answer})
+    await acache.update_history(user_id, history)
 
-    except openai.error.ServiceUnavailableError:
-        await update.message.reply_text('Сервер OpenAi перегружен. Попробуйте ещё раз.')
-        utils.logging(f'FiX НЕ ответил пользователю - @{user_name} id:{user_id} на сообщение, - \"{user_message}\"')
+    await update.message.reply_text(system_answer)
+    utils.logging(f'FiX ответил пользователю - @{user_name} id:{user_id} на сообщение, - \"{user_message}\".')
 
-    finally:
-        await acache.close()
+    await acache.close()
 
 
-def fix_run() -> None:
+def main() -> None:
     """
     Run the fix-bot
     """
     utils.logging('Fix Запущен.')
-    application = Application.builder().token(FIX_API_KEY).build()
+    application = Application.builder().token(telegram_api_key).build()
     application.add_handler(CommandHandler('start', hi))
     application.add_handler(CommandHandler('help', show_commands))
     application.add_handler(CommandHandler('msg', message_to_developer))
@@ -115,6 +92,6 @@ def fix_run() -> None:
 
 if __name__ == "__main__":
     try:
-        fix_run()
+        main()
     finally:
         utils.logging('Fix Завершает работу.')

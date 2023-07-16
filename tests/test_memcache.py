@@ -1,11 +1,11 @@
 # pylint: skip-file
 import asyncio
-from ..cache import FixClient
+from ..cache import BotCacheClient
 from collections import deque
 
 
 def test_get_or_create_history():
-    cache = FixClient("127.0.0.1", 11211)
+    cache = BotCacheClient("127.0.0.1", 11211)
     block_id = 'test'
     maxlen = 1
     exptime = 3
@@ -17,7 +17,7 @@ def test_get_or_create_history():
 
 
 def test_update_history():
-    cache = FixClient("127.0.0.1", 11211)
+    cache = BotCacheClient("127.0.0.1", 11211)
     block_id = 'test'
     test_history = {'test': 'test'}
     maxlen = 1
@@ -34,7 +34,7 @@ def test_update_history():
 
 
 def test_cut_off_excess():
-    cache = FixClient("127.0.0.1", 11211)
+    cache = BotCacheClient("127.0.0.1", 11211)
     block_id = 'test'
     test_history = {'test': 'test2'}
     maxlen = 1
