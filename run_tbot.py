@@ -70,7 +70,9 @@ async def handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await acache.update_history(user_id, history)
 
     await update.message.reply_text(system_answer)
-    utils.logging(f'FiX ответил пользователю - @{user_name} id:{user_id} на сообщение, - \"{user_message}\".')
+    utils.logging(
+        f'{utils.get_time()} Отвечено - @{user_name} id:{user_id} на сообщение, - \"{user_message}\".', color='green'
+    )
 
     await acache.close()
 
@@ -79,7 +81,7 @@ def main() -> None:
     """
     Run the fix-bot
     """
-    utils.logging('Fix Запущен.')
+    utils.logging('Fix Запущен.', color='yellow')
     application = Application.builder().token(telegram_api_key).build()
     application.add_handler(CommandHandler('start', hi))
     application.add_handler(CommandHandler('help', show_commands))
@@ -94,4 +96,4 @@ if __name__ == "__main__":
     try:
         main()
     finally:
-        utils.logging('Fix Завершает работу.')
+        utils.logging('Fix Завершает работу.', color='yellow')

@@ -1,4 +1,5 @@
 import openai
+import openai.error
 from keys import openai_api_keys
 import utils
 
@@ -18,10 +19,10 @@ async def get_answer(history: list) -> str:
         )
         return answer['choices'][0]['message']['content']
 
-    except openai.error.RateLimitError:
-        openai.api_key = next(key)
-        utils.logging('Fix сменил Api-ключ. (RateLimit)')
-        return await get_answer(history)
+    # except openai.error.RateLimitError:
+    #     openai.api_key = next(key)
+    #     utils.logging('Fix сменил Api-ключ. (RateLimit)', color='red')
+    #     return await get_answer(history)
 
     except openai.error.ServiceUnavailableError:
-        utils.logging('Неизвестная ошибка сервера.')
+        utils.logging('Неизвестная ошибка сервера.', color='red')
