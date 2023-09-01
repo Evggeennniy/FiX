@@ -24,12 +24,9 @@ async def get_key(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text(f'Всего ключей: {keys_count}. Из них валидных добавлено: {valid_keys_count}.')
 
 
-async def show_cart(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def show_card(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     cart = '5375 4141 3166 6256 - Monobank\n' \
-        'Укажите в коммент. оплаты свой телеграм!\n' \
-        'Подписка на неделю: 100 UAH.\n' \
-        'Подписка на месяц: 300 UAH.\n' \
-        '50% с дохода будет перечислено на ВСУ !!!'
+        'На поддержку проекта.\n'
     await update.message.reply_text(cart)
 
 
@@ -84,9 +81,9 @@ def main() -> None:
     utils.logging('Fix Запущен.', color='yellow')
     application = Application.builder().token(telegram_api_key).build()
     application.add_handler(CommandHandler('start', hi))
-    application.add_handler(CommandHandler('help', show_commands))
-    application.add_handler(CommandHandler('msg', message_to_developer))
-    application.add_handler(CommandHandler('pay', show_cart))
+    application.add_handler(CommandHandler('get_card', show_card))
+    # application.add_handler(CommandHandler('msg', message_to_developer))
+    # application.add_handler(CommandHandler('pay', show_cart))
     # application.add_handler(CommandHandler('key', get_key))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handler))
     application.run_polling(allowed_updates=Update.ALL_TYPES)
